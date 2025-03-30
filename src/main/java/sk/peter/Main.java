@@ -2,6 +2,7 @@ package sk.peter;
 
 import sk.peter.calculator.AbstractCalculator;
 import sk.peter.calculator.CalculatorHolder;
+import sk.peter.operation.ArithmeticOperator;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -14,14 +15,15 @@ public class Main {
     public static void main(String[] args) {
        do {
            System.out.println("Write number, then type of operation (+, -, *, /) and then write number again");
-           double left, right;
-           char operator;
+           final double left, right;
+           final ArithmeticOperator operator;
 
            try {
                left = scanner.nextDouble();
-               operator = scanner.next().charAt(0);
+               final String line = scanner.next();
+               operator = ArithmeticOperator.getFromSymbol(line);
                right = scanner.nextDouble();
-           } catch (InputMismatchException e){
+           } catch (InputMismatchException | IllegalArgumentException e){
                System.out.println("invalid input");
                scanner.nextLine();
                continue;
@@ -31,6 +33,6 @@ public class Main {
            final AbstractCalculator calculator = calculatorHolder.getSuitableCalculator(operator);
            calculator.calculate(operands,operator);
            calculatorHolder.getSuitableCalculator(operator);
-       }while (true);
+      }while (true);
     }
 }
